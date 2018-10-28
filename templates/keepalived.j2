@@ -1,9 +1,11 @@
 
 vrrp_instance VI_1 {
         interface {{ keepalived_network_interface|default('eth1') }}
-        state MASTER
+        state {% for node in groups[keepalived_hosts_group] %}{% if node == ansible_hostname %}{% if loop.index == 1 %}MASTER{% else %}BACKUP{% endif %}{% endif %}{% endfor %}
+        
         virtual_router_id 51
-        priority {{ keepalived_config_default_priority }}
+        priority {% for node in groups[keepalived_hosts_group] %}{% if node == ansible_hostname %}{{ keepalived_config_default_priority + loop.index }}{% endif %}{% endfor %}
+        
         authentication {
             auth_type PASS
             auth_pass {{ keepalived_config_password }}
