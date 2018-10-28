@@ -1,0 +1,7 @@
+.molecule
+molecule/*/certificates
+.vagrant
+*.pyc
+*.retry
+*.vdi
+__pycache__

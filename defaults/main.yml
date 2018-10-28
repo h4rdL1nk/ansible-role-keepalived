@@ -1,0 +1,14 @@
+---
+# Role configuration options
+
+keepalived_packages:
+  - keepalived
+
+keepalived_hosts_group: keepalived
+
+keepalived_network_interface: eth1
+keepalived_network_floating_ip: 172.28.128.100
+
+keepalived_config_file: /etc/keepalived/keepalived.conf
+keepalived_config_default_priority: 100
+keepalived_config_password: k33p4L1v3D4uTH
