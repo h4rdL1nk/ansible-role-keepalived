@@ -1,16 +1,29 @@
 
 vrrp_instance VI_1 {
-        interface {{ keepalived_network_interface|default('eth1') }}
-        state {% for node in groups[keepalived_hosts_group] %}{% if node == ansible_hostname %}{% if loop.index == 1 %}MASTER{% else %}BACKUP{% endif %}{% endif %}{% endfor %}
-        
-        virtual_router_id 51
-        priority {% for node in groups[keepalived_hosts_group] %}{% if node == ansible_hostname %}{{ keepalived_config_default_priority + loop.index }}{% endif %}{% endfor %}
-        
-        authentication {
-            auth_type PASS
-            auth_pass {{ keepalived_config_password }}
-        }
-        virtual_ipaddress {
-                {{ keepalived_network_floating_ip }}/24 dev {{ keepalived_network_interface|default('eth1') }}
-        }
+
+    interface {{ keepalived_network_interface|default('eth1') }} 
+{% for node in groups[keepalived_hosts_group] %}
+{% if node == ansible_hostname %}
+{% if loop.index == 1 %}
+    state MASTER
+{% else %}
+    state BACKUP
+{% endif %}
+{% endif %}
+{% endfor %}
+    virtual_router_id 51 
+{% for node in groups[keepalived_hosts_group] %}
+{% if node == ansible_hostname %}
+    priority {{ keepalived_config_default_priority + loop.index }}
+{% endif %}
+{% endfor %}    
+    authentication {
+        auth_type PASS
+        auth_pass {{ keepalived_config_password }}
+    }
+    
+    virtual_ipaddress {
+        {{ keepalived_network_floating_ip }}/{{ keepalived_network_mask_bits }} dev {{ keepalived_network_interface|default('eth1') }}
+    }
+
 }

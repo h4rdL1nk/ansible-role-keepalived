@@ -8,6 +8,7 @@ keepalived_hosts_group: keepalived
 
 keepalived_network_interface: eth1
 keepalived_network_floating_ip: 172.28.128.100
+keepalived_network_mask_bits: 24
 
 keepalived_config_file: /etc/keepalived/keepalived.conf
 keepalived_config_default_priority: 100
